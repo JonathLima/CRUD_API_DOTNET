@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Contexts;
 using Domain.Dto;
 using Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace Repositories
@@ -18,27 +21,75 @@ namespace Repositories
     }
     public async Task<TaskList> CreateTaskRepositoryAsync(TaskListDto DataTaskList)
     {
-      throw new NotImplementedException();
+
+      TaskList dataEntity = new TaskList();
+      dataEntity.MapDto(DataTaskList);
+
+      if (dataEntity.Id == DataTaskList.Id)
+      {
+        throw new ArgumentException("Task já existe.");
+      }
+
+      await _taskListDbContext.TaskLists.AddAsync(dataEntity);
+      await _taskListDbContext.SaveChangesAsync();
+
+      return dataEntity;
+
     }
 
-    public async Task<TaskList> DeleteTaskByIdRepositoryAsync(string Id)
+    public async Task DeleteTaskByIdRepositoryAsync(string Id)
     {
-      throw new NotImplementedException();
+
+      var taskId = await _taskListDbContext.TaskLists.FindAsync(Id);
+
+      if (taskId != null)
+      {
+        _taskListDbContext.TaskLists.Remove(taskId);
+        await _taskListDbContext.SaveChangesAsync();
+      }
+
     }
 
     public async Task<IEnumerable<TaskList>?> GetAllTasksRepositoryAsync()
     {
-      throw new NotImplementedException();
+      return await _taskListDbContext.TaskLists.ToListAsync();
     }
 
     public async Task<TaskList> GetTaskRepositoryAsync(string Id)
     {
-      throw new NotImplementedException();
+
+      var taskId = await _taskListDbContext.TaskLists.FindAsync(Id);
+      if (taskId == null)
+      {
+        throw new ArgumentException("aaa");
+      }
+
+      return taskId;
+
     }
 
     public async Task<TaskList> UpdateTaskByIdRepositoryAsync(TaskListDto DataTaskList, string Id)
     {
-      throw new NotImplementedException();
+      TaskList dataEntity = new TaskList();
+      dataEntity.MapDto(DataTaskList);
+
+      var database = await _taskListDbContext.TaskLists.FindAsync(Id);
+
+
+      if (database == null)
+      {
+        throw new ArgumentException("Task não encontrada.");
+      }
+
+      if (dataEntity.Id.ToString() == Id)
+      {
+        _taskListDbContext.TaskLists.Update(dataEntity);
+
+      }
+
+
+      return dataEntity;
+
     }
   }
 }

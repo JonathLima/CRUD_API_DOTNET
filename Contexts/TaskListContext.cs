@@ -9,7 +9,6 @@ namespace Contexts
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-      optionsBuilder.UseNpgsql();
     }
 
     public DbSet<TaskList> TaskLists { get; set; }

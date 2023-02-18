@@ -10,7 +10,7 @@ namespace Interfaces
     Task<IEnumerable<TaskList>?> GetAllTasksRepositoryAsync();
     Task<TaskList> CreateTaskRepositoryAsync(TaskListDto DataTaskList);
     Task<TaskList> UpdateTaskByIdRepositoryAsync(TaskListDto DataTaskList, string Id);
-    Task DeleteTaskByIdRepositoryAsync(string Id);
+    Task<TaskList> DeleteTaskByIdRepositoryAsync(string Id);
   }
 
 }

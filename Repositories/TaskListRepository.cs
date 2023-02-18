@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Contexts;
 using Domain.Dto;
 using Interfaces;
@@ -37,17 +32,17 @@ namespace Repositories
 
     }
 
-    public async Task DeleteTaskByIdRepositoryAsync(string Id)
+    public async Task<TaskList> DeleteTaskByIdRepositoryAsync(string Id)
     {
-
       var taskId = await _taskListDbContext.TaskLists.FindAsync(Id);
 
-      if (taskId != null)
+
+      if (taskId == null)
       {
-        _taskListDbContext.TaskLists.Remove(taskId);
-        await _taskListDbContext.SaveChangesAsync();
+        throw new ArgumentException("Task não encontrada ou não existe.");
       }
 
+      return taskId;
     }
 
     public async Task<IEnumerable<TaskList>?> GetAllTasksRepositoryAsync()

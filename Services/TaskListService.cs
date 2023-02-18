@@ -16,27 +16,43 @@ namespace Services
 
     public async Task<TaskList> CreateTaskServiceAsync(TaskListDto DataTaskList)
     {
-      throw new NotImplementedException();
+      var entityData = await _taskRepository.CreateTaskRepositoryAsync(DataTaskList);
+
+      if (entityData == null)
+      {
+        throw new ArgumentException("Task não encontrada.");
+      }
+
+      return entityData;
+
     }
 
     public async Task<TaskList> DeleteTaskByIdServiceAsync(string Id)
     {
-      throw new NotImplementedException();
+      var entityData = await _taskRepository.DeleteTaskByIdRepositoryAsync(Id);
+
+      return entityData;
     }
 
     public async Task<IEnumerable<TaskList>?> GetAllTasksServiceAsync()
     {
-      throw new NotImplementedException();
+      var entityData = await _taskRepository.GetAllTasksRepositoryAsync();
+
+      return entityData;
     }
 
     public async Task<TaskList> GetTaskServiceAsync(string Id)
     {
-      throw new NotImplementedException();
+      var entityData = await _taskRepository.GetTaskRepositoryAsync(Id);
+
+      return entityData;
     }
 
     public async Task<TaskList> UpdateTaskByIdServiceAsync(TaskListDto DataTaskList, string Id)
     {
-      throw new NotImplementedException();
+      TaskList updateDataEntity = new TaskList();
+      var entityData = await _taskRepository.UpdateTaskByIdRepositoryAsync(DataTaskList, Id);
+      return updateDataEntity;
     }
   }
 }
